@@ -15,28 +15,6 @@ class ValidationService {
     return true;
   }
 
-  //   static async validateText(text) {
-  //     try {
-  //       const [rows] = await db.query("SELECT isValidText(?) AS result", [text]);
-  //       return rows[0].result;
-  //     } catch (error) {
-  //       console.error("Error validating text:", error);
-  //       throw error;
-  //     }
-  //   }
-
-  //   static async validatePostcode(postcode) {
-  //     try {
-  //       const [rows] = await db.query("SELECT isValidPostcode(?) AS result", [
-  //         postcode,
-  //       ]);
-  //       return rows[0].result;
-  //     } catch (error) {
-  //       console.error("Error validating postcode:", error);
-  //       throw error;
-  //     }
-  //   }
-
   static async validateDate(date) {
     try {
       const [rows] = await db.query("SELECT isValidDate(?) AS result", [date]);
