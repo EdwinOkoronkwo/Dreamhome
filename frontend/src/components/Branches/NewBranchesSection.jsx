@@ -2,27 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingIndicator from "../UI/LoadingIndicator.jsx";
 import ErrorBlock from "../UI/ErrorBlock.jsx";
 import BranchItem from "./BranchItem.jsx";
-import {
-  fetchBranches,
-  parseBranchData,
-  //parseJsonString,
-} from "../../util/http.js";
+import { fetchBranches } from "../../util/http.js";
 
 export default function NewBranchesSection() {
   const { data, isFetching, isError, error } = useQuery({
-    queryKey: ["branches"],
-    queryFn: fetchBranches,
+    queryKey: ["branches", { max: 3 }],
+    queryFn: ({ signal, queryKey }) =>
+      fetchBranches({ signal, ...queryKey[1] }),
     staleTime: 5000,
+    onSuccess: (data) => {
+      console.log("Fetched branch data:", data);
+    },
   });
-  // const { data, isFetching, isError, error } = useQuery({
-  //   queryKey: ["branches", { max: 3 }],
-  //   queryFn: ({ signal, queryKey }) =>
-  //     fetchBranches({ signal, ...queryKey[1] }),
-  //   staleTime: 5000,
-  //   onSuccess: (data) => {
-  //     console.log("Fetched branch data:", data);
-  //   },
-  // });
 
   let content;
 
@@ -63,22 +54,22 @@ export default function NewBranchesSection() {
 }
 
 // Helper function to parse JSON-encoded strings
-// function parseJsonString(value) {
-//   try {
-//     const parsed = JSON.parse(value);
-//     return Array.isArray(parsed) ? parsed[0] : parsed;
-//   } catch {
-//     return value;
-//   }
-// }
+function parseJsonString(value) {
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed[0] : parsed;
+  } catch {
+    return value;
+  }
+}
 
-// // Function to parse branch data
-// function parseBranchData(branches) {
-//   return branches.map((branch) => ({
-//     branchno: parseJsonString(branch.branchno),
-//     street: parseJsonString(branch.street),
-//     city: parseJsonString(branch.city),
-//     postcode: parseJsonString(branch.postcode),
-//     image: branch.image ? branch.image.replace(/\\/g, "/") : null,
-//   }));
-// }
+// Function to parse branch data
+function parseBranchData(branches) {
+  return branches.map((branch) => ({
+    branchno: parseJsonString(branch.branchno),
+    street: parseJsonString(branch.street),
+    city: parseJsonString(branch.city),
+    postcode: parseJsonString(branch.postcode),
+    image: branch.image ? branch.image.replace(/\\/g, "/") : null,
+  }));
+}
