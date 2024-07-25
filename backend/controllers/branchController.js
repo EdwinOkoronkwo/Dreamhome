@@ -3,10 +3,7 @@
 const path = require("path");
 const fs = require("fs");
 const BranchService = require("../services/branch.service");
-const BranchValidationUtil = require("../util/branchValidation");
-const { validationResult } = require("express-validator");
 const { NotFoundError, DatabaseError } = require("../util/errors");
-const multiparty = require("multiparty");
 
 async function handleFileUpload(file) {
   if (!file) {
