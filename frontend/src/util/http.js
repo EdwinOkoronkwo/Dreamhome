@@ -437,6 +437,10 @@ export const updateBranch = async ({ branchno, branchData }) => {
     const response = await fetch(`${BASE_URL}/${branchno}`, {
       method: "PATCH",
       body: branchData, // FormData should be sent as is
+      headers: {
+        Accept: "application/json",
+        // 'Content-Type': 'multipart/form-data' // Do not set this header manually
+      },
     });
 
     if (!response.ok) {
